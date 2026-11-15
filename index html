@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoPulse Nigeria | 2027 Slingshot Challenge</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="initAppBoot()">
+
+  <!-- Returning-User Liquid-Glass Splash Screen -->
+  <div id="splashScreen">
+    <div class="splash-glass">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.4">
+        <path d="M12 2L4 7v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V7l-8-5z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+      <h2 style="margin-top:12px;">EcoPulse Nigeria</h2>
+      <p id="splashGreeting" style="color:#a7f3d0;font-size:14px;margin-top:6px;">Loading your dashboard...</p>
+      <div class="loader-track"><div class="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Real Email Sign-In / Registration Screen -->
+    <div id="authScreen" class="content" style="padding-top:34px;">
+      <div class="points-hero" style="text-align:center;">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.3">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/>
+        </svg>
+        <h1 style="margin-top:8px;">EcoPulse Nigeria</h1>
+        <p style="color:#a7f3d0;font-size:14px;">Report • Recycle • Restore Across All 36 States & FCT</p>
+      </div>
+
+      <div id="loginBox" class="glass-card">
+        <h3 style="margin-bottom:8px;">Sign In</h3>
+        <input type="email" id="loginEmail" placeholder="Real Email Address" />
+        <input type="password" id="loginPass" placeholder="Password" />
+        <button class="btn btn-primary" onclick="handleLogin()">Log In</button>
+        <button class="btn btn-glass" style="margin-top:10px;" onclick="demoLogin()">One-Tap Demo Login</button>
+        <p style="text-align:center;font-size:13px;margin-top:14px;color:#a7f3d0;">
+          New here? <a href="#" style="color:#6ee7b7;font-weight:700;" onclick="toggleAuthMode('register')">Create Account</a>
+        </p>
+      </div>
+
+      <div id="registerBox" class="glass-card" style="display:none;">
+        <h3 style="margin-bottom:8px;">Create Nigeria Eco-Account</h3>
+        <input type="text" id="regName" placeholder="Full Name" />
+        <input type="text" id="regSchool" placeholder="School or Community Name" />
+        <select id="regState"></select>
+        <input type="email" id="regEmail" placeholder="Real Email Address" />
+        <input type="password" id="regPass" placeholder="Create Password" />
+        <button class="btn btn-primary" onclick="handleRegister()">Register & Start (+30 Bonus Pts)</button>
+        <p style="text-align:center;font-size:13px;margin-top:14px;color:#a7f3d0;">
+          Already registered? <a href="#" style="color:#6ee7b7;font-weight:700;" onclick="toggleAuthMode('login')">Sign In</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Logged-In App -->
+    <div id="mainApp" style="display:none;">
+      <div class="topbar">
+        <div>
+          <h2 id="userDisplayName" style="font-size:19px;">Student</h2>
+          <div id="userStateBadge" style="font-size:12px;color:#a7f3d0;">Nigeria</div>
+        </div>
+        <span class="badge">2027 Slingshot</span>
+      </div>
+
+      <div class="content">
+        <!-- Liquid-Glass Eco-Points Summary Box -->
+        <div class="points-hero">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;color:#a7f3d0;font-weight:600;">YOUR ECO-POINTS WALLET</div>
+              <div style="font-size:38px;font-weight:800;line-height:1.1;margin-top:4px;">
+                <span id="pointsBalance">0</span> <span style="font-size:16px;font-weight:600;">PTS</span>
+              </div>
+            </div>
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.2">
+              <path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- TAB 1: ACT -->
+        <div id="tabAct" class="screen active">
+          <div class="glass-card">
+            <h3>Log Eco-Action</h3>
+            <div class="action-grid">
+              <div class="action-tile selected" onclick="selectActionType('Report Blocked Drain', 10, this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v6m0 0l-3-3m3 3l3-3M4 14h16v6H4z"/></svg>
+                <div style="font-size:12px;font-weight:700;">Report Drain<br>+10 pts</div>
+              </div>
+              <div class="action-tile" onclick="selectActionType('Recycle Plastics', 20, this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/></svg>
+                <div style="font-size:12px;font-weight:700;">Recycle<br>+20 pts</div>
+              </div>
+              <div class="action-tile" onclick="selectActionType('Restore & Tree Care', 15, this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22v-7m0 0c-3.5 0-6-2.5-6-6 0-3 2.5-6 6-7 3.5 1 6 4 6 7 0 3.5-2.5 6-6 6z"/></svg>
+                <div style="font-size:12px;font-weight:700;">Tree Care<br>+15 pts</div>
+              </div>
+            </div>
+
+            <label style="font-size:13px;color:#a7f3d0;">Select Nigerian State</label>
+            <select id="actionState"></select>
+
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" id="actionLocation" placeholder="Street, School, or GPS Coordinates" style="margin:0;" />
+              <button class="btn btn-glass" style="width:auto;padding:13px;" onclick="detectGPS()">GPS</button>
+            </div>
+
+            <label style="display:block;font-size:13px;color:#a7f3d0;margin-top:12px;">Snap Live Photo or Upload Video</label>
+            <input type="file" accept="image/*,video/*" capture="environment" onchange="handleMediaUpload(event)" />
+            <div id="mediaPreview"></div>
+
+            <textarea id="actionNotes" rows="2" placeholder="Describe the waste hotspot, plastic batch, or tree status..."></textarea>
+            <button id="submitActionBtn" class="btn btn-primary" onclick="submitEcoAction()">Post & Earn +10 Eco-Points</button>
+          </div>
+        </div>
+
+        <!-- TAB 2: GOOGLE MAPS -->
+        <div id="tabMap" class="screen">
+          <div class="glass-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <h3>Nigeria Live Google Map</h3>
+              <a id="openRealMapsBtn" href="https://google.com" target="_blank" class="badge" style="text-decoration:none;">Open App ↗</a>
+            </div>
+            <select id="mapStateFilter" onchange="filterMapByState()"></select>
+            <iframe id="googleMapFrame" class="map-frame" src="https://google.com" loading="lazy"></iframe>
+          </div>
+          <div id="mapPinList"></div>
+        </div>
+
+        <!-- TAB 3: COMMUNITY FEED -->
+        <div id="tabFeed" class="screen">
+          <h3 style="margin-bottom:10px;">Nigeria Photo & Video Feed</h3>
+          <div id="feedList"></div>
+        </div>
+
+        <!-- TAB 4: REWARDS & RANKINGS -->
+        <div id="tabRewards" class="screen">
+          <h3 style="margin-bottom:10px;">Rewards Store</h3>
+          <div id="rewardsList"></div>
+          <h3 style="margin:14px 0 10px;">My Claimed Vouchers</h3>
+          <div id="voucherList"></div>
+          <h3 style="margin:14px 0 10px;">Nationwide Leaderboard</h3>
+          <div id="leaderboardList"></div>
+        </div>
+
+        <!-- TAB 5: SETTINGS & DEVELOPER INFO -->
+        <div id="tabSettings" class="screen">
+          <div class="glass-card">
+            <h3 style="margin-bottom:10px;">About & Developer</h3>
+            <div id="devProfileBox"></div>
+          </div>
+          <div class="glass-card">
+            <h3 style="margin-bottom:10px;">Account Controls</h3>
+            <button class="btn btn-glass" style="margin-bottom:10px;" onclick="resetAppDemo()">Reset Sample Nigeria Data</button>
+            <button class="btn btn-danger" onclick="handleLogout()">Log Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large Bold Bottom Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="switchTab('tabAct', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+          Act
+        </button>
+        <button class="nav-btn" onclick="switchTab('tabMap', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.5"/></svg>
+          Map
+        </button>
+        <button class="nav-btn" onclick="switchTab('tabFeed', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="16" rx="3"/><polygon points="10 9 15 12 10 15 10 9"/></svg>
+          Feed
+        </button>
+        <button class="nav-btn" onclick="switchTab('tabRewards', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          Rewards
+        </button>
+        <button class="nav-btn" onclick="switchTab('tabSettings', this)">
